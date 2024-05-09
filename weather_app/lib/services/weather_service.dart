@@ -29,14 +29,10 @@ Future<Weather> fetchWeather(String city) async {
       'http://api.weatherapi.com/v1/current.json?key=${Weather.apiKey}&q=$city&aqi=no'));
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
     Map<String, dynamic> json =
         jsonDecode(response.body) as Map<String, dynamic>;
     return Weather.fromJson(json);
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to load weather');
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/consts/consts.dart';
-import 'package:weather_app/services/weather_api.dart';
+import 'package:weather_app/services/weather_service.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -29,82 +29,78 @@ class _HomeState extends State<Home> {
         ),
         body: Container(
           color: bgColor,
-          child: Center(
-            child: weather == null
-                ? const Text("Weather no found")
-                : FutureBuilder(
-                    future: weather,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        if (snapshot.hasData) {
-                          return Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const SizedBox(
-                                height: 150,
-                              ),
-                              Text(
-                                city,
-                                style:
-                                    TextStyle(fontSize: 30, color: textColor),
-                              ),
-                              const SizedBox(
-                                height: 60,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    color: iconColor,
-                                    snapshot.data!.weatherTitle
-                                            .contains('cloudy')
-                                        ? cloudy
-                                        : rain,
-                                    size: 60,
-                                  ),
-                                  const SizedBox(
-                                    width: 50,
-                                  ),
-                                  Text(
-                                    snapshot.data!.temp.toString(),
-                                    style: TextStyle(
-                                        fontSize: 30, color: textColor),
-                                  ),
-                                  const SizedBox(
-                                    width: 20,
-                                  ),
-                                  Column(
-                                    children: [
-                                      Text(
-                                        "Min : " + "data",
-                                        style: TextStyle(color: textColor),
-                                      ),
-                                      Text(
-                                        "Max : " + "data",
-                                        style: TextStyle(color: textColor),
-                                      ),
-                                    ],
-                                  )
-                                ],
-                              ),
-                              const SizedBox(
-                                height: 60,
-                              ),
-                              Text(
-                                snapshot.data!.weatherTitle,
-                                style: TextStyle(
-                                    fontSize: size - 5, color: textColor),
-                              ),
-                            ],
-                          );
-                        } else {
-                          return const Text("No Weather Found");
-                        }
+          child: weather == null
+              ? const Text("Weather no found")
+              : FutureBuilder(
+                  future: weather,
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        return Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            const SizedBox(
+                              height: 150,
+                            ),
+                            Text(
+                              city,
+                              style: TextStyle(fontSize: 30, color: textColor),
+                            ),
+                            const SizedBox(
+                              height: 60,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  color: iconColor,
+                                  snapshot.data!.weatherTitle.contains('cloudy')
+                                      ? cloudy
+                                      : rain,
+                                  size: 60,
+                                ),
+                                const SizedBox(
+                                  width: 50,
+                                ),
+                                Text(
+                                  snapshot.data!.temp.toString(),
+                                  style:
+                                      TextStyle(fontSize: 30, color: textColor),
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      "Min : " + "data",
+                                      style: TextStyle(color: textColor),
+                                    ),
+                                    Text(
+                                      "Max : " + "data",
+                                      style: TextStyle(color: textColor),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 60,
+                            ),
+                            Text(
+                              snapshot.data!.weatherTitle,
+                              style: TextStyle(
+                                  fontSize: size - 5, color: textColor),
+                            ),
+                          ],
+                        );
                       } else {
-                        return const CircularProgressIndicator();
+                        return const Text("No Weather Found");
                       }
-                    }),
-          ),
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
         ),
       ),
     );

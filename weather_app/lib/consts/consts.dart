@@ -16,5 +16,5 @@ IconData cloudy = WeatherIcons.cloudy;
 //IconColors
 Color iconColor = const Color.fromARGB(255, 255, 255, 255);
 
-//Size
+//Text Size
 double size = 30;
