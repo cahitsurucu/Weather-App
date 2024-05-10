@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:weather_app/consts/consts.dart';
 import 'package:weather_app/services/weather_service.dart';
 
@@ -15,7 +16,13 @@ class _HomeState extends State<Home> {
   @override
   void initState() {
     super.initState();
-    weather = fetchWeather(city);
+    getWeather(city);
+  }
+
+  void getWeather(String city) {
+    setState(() {
+      weather = fetchWeather(city);
+    });
   }
 
   @override
@@ -47,20 +54,17 @@ class _HomeState extends State<Home> {
                               style: TextStyle(fontSize: 30, color: textColor),
                             ),
                             const SizedBox(
-                              height: 60,
+                              height: 50,
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(
-                                  color: iconColor,
-                                  snapshot.data!.weatherTitle.contains('cloudy')
-                                      ? cloudy
-                                      : rain,
-                                  size: 60,
+                                Image.network(
+                                  'http:${snapshot.data!.weatherIcon}',
+                                  scale: 0.8,
                                 ),
                                 const SizedBox(
-                                  width: 50,
+                                  width: 40,
                                 ),
                                 Text(
                                   snapshot.data!.temp.toString(),
@@ -73,11 +77,11 @@ class _HomeState extends State<Home> {
                                 Column(
                                   children: [
                                     Text(
-                                      "Min : " + "data",
+                                      "Min : ${snapshot.data!.minTemp}",
                                       style: TextStyle(color: textColor),
                                     ),
                                     Text(
-                                      "Max : " + "data",
+                                      "Max : ${snapshot.data!.maxTemp}",
                                       style: TextStyle(color: textColor),
                                     ),
                                   ],
@@ -85,7 +89,7 @@ class _HomeState extends State<Home> {
                               ],
                             ),
                             const SizedBox(
-                              height: 60,
+                              height: 50,
                             ),
                             Text(
                               snapshot.data!.weatherTitle,
