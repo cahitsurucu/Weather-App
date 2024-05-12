@@ -34,8 +34,8 @@ class _HomeState extends State<Home> {
     card.clear();
     for (int i = hour; i < 24; i++) {
       CardWidget widget = CardWidget(
-        icon: snapshot.data!.weatherIcon,
-        temp: snapshot.data!.temp,
+        icon: snapshot.data!.hourly[i].toList()[1],
+        temp: snapshot.data!.hourly[i].toList()[0],
         time: i,
       );
       card.add(widget);
@@ -47,6 +47,7 @@ class _HomeState extends State<Home> {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: appBarbgColor,
           title: const Text("Weather App"),
@@ -56,105 +57,125 @@ class _HomeState extends State<Home> {
           onPressed: () => _showDialog(context),
           child: const Icon(Icons.search),
         ),
-        body: Container(
-          color: bgColor,
-          child: weather == null
-              ? const Text("Weather no found")
-              : FutureBuilder(
-                  future: weather,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.done) {
-                      if (snapshot.hasData) {
-                        createList(DateTime.parse(snapshot.data!.dateTime).hour,
-                            snapshot);
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            Text(
-                              snapshot.data!.name,
-                              style: TextStyle(fontSize: 30, color: textColor),
-                            ),
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Image.network(
-                                  'http:${snapshot.data!.weatherIcon}',
-                                  scale: 0.8,
-                                ),
-                                const SizedBox(
-                                  width: 40,
-                                ),
-                                Text(
-                                  snapshot.data!.temp.toString(),
-                                  style:
-                                      TextStyle(fontSize: 30, color: textColor),
-                                ),
-                                const SizedBox(
-                                  width: 20,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Min : ${snapshot.data!.minTemp}",
-                                      style: TextStyle(color: textColor),
-                                    ),
-                                    Text(
-                                      "Max : ${snapshot.data!.maxTemp}",
-                                      style: TextStyle(color: textColor),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            Text(
-                              snapshot.data!.weatherTitle,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: size - 5, color: textColor),
-                            ),
-                            const SizedBox(
-                              height: 50,
-                            ),
-                            Row(
-                              children: [
-                                Expanded(
-                                    child: SizedBox(
-                                  height: 200,
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.horizontal,
-                                    shrinkWrap: true,
-                                    itemCount: card.length,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return CardWidget(
-                                        icon: card[index].icon,
-                                        temp: card[index].temp,
-                                        time: card[index].time,
-                                      );
-                                    },
+        body: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            color: bgColor,
+            child: weather == null
+                ? const Text(
+                    "Weather no found",
+                    textAlign: TextAlign.center,
+                  )
+                : FutureBuilder(
+                    future: weather,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done) {
+                        if (snapshot.hasData) {
+                          createList(
+                              DateTime.parse(snapshot.data!.dateTime).hour,
+                              snapshot);
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              Text(
+                                snapshot.data!.name,
+                                style:
+                                    TextStyle(fontSize: 30, color: textColor),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.network(
+                                    'http:${snapshot.data!.weatherIcon}',
+                                    scale: 0.8,
                                   ),
-                                ))
-                              ],
-                            )
-                          ],
-                        );
+                                  const SizedBox(
+                                    width: 40,
+                                  ),
+                                  Text(
+                                    snapshot.data!.temp.toString(),
+                                    style: TextStyle(
+                                        fontSize: 30, color: textColor),
+                                  ),
+                                  const SizedBox(
+                                    width: 20,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Min : ${snapshot.data!.minTemp}",
+                                        style: TextStyle(color: textColor),
+                                      ),
+                                      Text(
+                                        "Max : ${snapshot.data!.maxTemp}",
+                                        style: TextStyle(color: textColor),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              Text(
+                                snapshot.data!.weatherTitle,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: size - 5, color: textColor),
+                              ),
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              Container(
+                                height: 210,
+                                width: MediaQuery.of(context).size.width - 15,
+                                color: Colors.amber,
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        child: SizedBox(
+                                      height: 190,
+                                      child: ListView.builder(
+                                        scrollDirection: Axis.horizontal,
+                                        shrinkWrap: true,
+                                        itemCount: card.length,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return CardWidget(
+                                            icon: card[index].icon,
+                                            temp: card[index].temp,
+                                            time: card[index].time,
+                                          );
+                                        },
+                                      ),
+                                    ))
+                                  ],
+                                ),
+                              )
+                            ],
+                          );
+                        } else {
+                          return const Center(
+                            child: Text(
+                              "No Weather Found",
+                              textAlign: TextAlign.center,
+                            ),
+                          );
+                        }
                       } else {
-                        return const Text("No Weather Found");
+                        return const CircularProgressIndicator();
                       }
-                    } else {
-                      return const CircularProgressIndicator();
-                    }
-                  }),
+                    }),
+          ),
         ),
       ),
     );

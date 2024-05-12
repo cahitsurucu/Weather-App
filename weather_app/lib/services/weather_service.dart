@@ -10,6 +10,7 @@ class Weather {
   final double maxTemp;
   final double minTemp;
   final String dateTime;
+  final List hourly;
 
   static const String apiKey = "b4f34e5fd92c4883bc575621240905";
 
@@ -21,9 +22,17 @@ class Weather {
     required this.maxTemp,
     required this.minTemp,
     required this.dateTime,
+    required this.hourly,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
+    var hourList = json['forecast']['forecastday'][0]['hour'];
+    var dataList = hourList
+        .map((hour) => {
+              hour['temp_c'],
+              hour['condition']['icon'],
+            })
+        .toList();
     return Weather(
         name: json['location']['name'],
         temp: json['current']['temp_c'],
@@ -31,7 +40,8 @@ class Weather {
         weatherTitle: json['current']['condition']['text'],
         maxTemp: json['forecast']['forecastday'][0]['day']['maxtemp_c'],
         minTemp: json['forecast']['forecastday'][0]['day']['mintemp_c'],
-        dateTime: json['current']['last_updated']);
+        dateTime: json['current']['last_updated'],
+        hourly: dataList);
   }
 }
 

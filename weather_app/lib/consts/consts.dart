@@ -3,7 +3,7 @@ import 'package:weather_icons/weather_icons.dart';
 
 //Colors
 Color appBarbgColor = const Color.fromARGB(255, 82, 144, 252);
-Color bgColor = const Color.fromARGB(255, 35, 64, 114);
+Color bgColor = const Color.fromARGB(255, 52, 90, 155);
 
 // TextColors
 Color textColor = const Color.fromARGB(255, 255, 255, 255);

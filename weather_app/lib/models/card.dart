@@ -13,16 +13,23 @@ class CardWidget extends StatelessWidget {
       width: 90,
       height: 150,
       child: Container(
-        margin: const EdgeInsets.all(3),
-        color: Colors.white,
+        margin: const EdgeInsets.all(4),
+        color: Colors.lightBlue,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(time.toString()),
+            const SizedBox(
+              height: 15,
+            ),
             Image.network(
               'http:$icon',
               scale: 0.8,
             ),
-            Text(temp.toString())
+            const SizedBox(
+              height: 15,
+            ),
+            Text("$temp °C")
           ],
         ),
       ),
